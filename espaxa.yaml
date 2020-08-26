@@ -1,0 +1,90 @@
+esphome:
+  name: esp_axa_01
+  platform: ESP8266
+  board: d1_mini
+
+  includes:
+  - AXA\espaxa.h 
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_key
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+# Enable Web server
+web_server:
+  port: 80
+
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+
+#only used for I2C sensor:
+
+i2c:
+  sda: D2
+  scl: D1
+  scan: True
+
+uart:
+  tx_pin: D7 #to pin 4 of the MCP2003
+  rx_pin: D6 #to pin 1 of the MCP2003
+  baud_rate: 19200
+  stop_bits: 2
+  id: uart_bus
+
+sensor:
+#first part only used for temperature sensor, change bmp/bme280 accordingly to your sensor.
+  - platform: bme280
+    temperature:
+      name: "Zolderraam temperatuur"
+      oversampling: 16x
+    pressure:
+      name: "BME280 Pressure"
+    humidity:
+      name: "BME280 Humidity"
+    address: 0x76
+    update_interval: 60s
+
+  - platform: custom
+    lambda: |-
+      auto my_axa = new CustomAXA2RemoteUART(id(uart_bus));
+      App.register_component(my_axa);
+      return {my_axa->axa_window};
+    sensors:
+     name: "Axa Window"
+     id: my_axa
+    
+cover:
+  - platform: template
+    name: "Zolderraam"
+    lambda: |-
+      if (id(my_axa).state==0) {
+        return cover::COVER_CLOSED;
+      } else {
+        return cover::COVER_OPEN;
+      }
+    open_action:
+      # Cancel any previous action
+      - uart.write: "\r"
+      - delay: 0.1s
+      - uart.write: "STOP\r\n"
+      - delay: 0.1s
+      - uart.write: "OPEN\r\n"
+    close_action:
+      - uart.write: "\r"
+      - delay: 0.1s
+      - uart.write: "STOP\r\n"
+      - delay: 0.1s
+      - uart.write: "CLOSE\r\n"
+    stop_action:
+      - uart.write: "\r"
+      - delay: 0.1s
+      - uart.write: "STOP\r\n"
+
