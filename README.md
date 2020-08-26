@@ -4,8 +4,7 @@ This module will connect the AXA Remote 2.0 with your Home Assistant Server usin
 The module is using a 5V power supply, and I use a DC-DC step-up converter (to create the 8V (7.5 with some cable loss) for the AXA Remote. So NO batteries needed in your AXA Remote! The Power Supply should have enough capacity to handle the motors inside the AXA. Preferable is a Raspberry Pi supply (model 3, 2.5A or more). The power can be connected via the WEMOS USB plug, or directly to the 5V and GND pin of the WEMOS. The DC-DC Converter should be adjusted to 8V, using a multimeter. You can plug in the power adapter to this module as well for delivering power.
 ## Schema
 This is more like 'connecting the modules'. The DC-DC converter is connected to 5V and the power input of the AXA Remote (pins 1 and 2). The MCP2003 is the LINBUS driver. It has some special 'low power'capabilities we will not use. Therefor the /WAKE function is disabled, and Vren is not used. RxD is the OUTPUT signal! It should be connected to Rx of the Wemos. This is a 'open drain' output, so we have to pull-up to 3.3V to create a Wemos compatible signal. The input is Tx, this is a TTL compatible input, but will accept the 3.3V as a '1'. The decoupling capacitors used are 47uF, but any value > 10uF is OK. As an extra a BMP/BME280 module is integrated to measure Temperature, Pressure and Humidity (BME). A nice feature of ESPHOME, just to show, but not neccesary for the AXA control.
-![Schema](https://raw.githubusercontent.com/galagaking/espaxa/master/docs/
-Schematic_ESP_AXA_2020-08-26_21-20-54.png)
+![Schema](https://raw.githubusercontent.com/galagaking/espaxa/master/docs/Schematic_ESP_AXA_2020-08-26_21-20-54.png)
 ## Components
 Or any other place you like (NO affiliate links :-) )
 - [Step-up converter](https://www.tinytronics.nl/shop/nl/spanning-converters/step-up/dc-dc-verstelbare-step-up-boost-converter-mt3608-2a)
