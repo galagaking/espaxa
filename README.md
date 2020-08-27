@@ -20,7 +20,7 @@ Sometimes difficult to find, my sources (NO affiliate links :-) ):
 - [AXA Documentation](http://files.domoticaforum.eu/uploads/Axa/AXA%20Remote%202%20domotica%20English%202012nov_V2.pdf)
 
 ## Construction
-No PCB (yet), so you have to use a protoboard to connect the components. Before connecting the AXA and the MCP (if u use a socket), measure the voltage on the MCP2003 pins (8V) and the AXA connector.
+No PCB (yet), so you have to use a protoboard to connect the components. Before connecting the AXA and the MCP (if you use a socket), measure the voltage on the MCP2003 pins (8V) and the AXA connector.
 ![ESPAXA](https://raw.githubusercontent.com/galagaking/espaxa/master/docs/espaxa.png)
 ## Programming
 We use ESPHOME to create the program file. This is more like a configuration than a program. espaxa.yaml has all the definitions, and is also referring to some program code in AXA\espaxa.h. You have to create this directory and put the expaxa.h file in it. Also fill in the WiFi credentials (or better: use the secrets file). More info on esphome
@@ -54,4 +54,4 @@ Use this project as-is, i am not responsible for any unexpected open window at y
 
 - PCB?
 
-(end)
+
