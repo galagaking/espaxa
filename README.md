@@ -1,4 +1,5 @@
 # ESPAXA
+![AXA2](https://github.com/galagaking/espaxa/blob/master/docs/20200831_155745.jpg)
 This module will connect the AXA Remote 2.0 with your Home Assistant Server using ESPHOME. The module will integrate in Home Assistant, showing the position of your Window (open or closed), and give you the possibility to open and close the window from there. The remote control will still work, the status of the window will synchronize with home assistant.
 
 ## Power
@@ -25,6 +26,9 @@ No PCB (yet), so you must use a protoboard to connect the components. Before con
 ## Programming
 We use ESPHOME to create the program file. This is more like a configuration than a program. espaxa.yaml has all the definitions and is also referring to some program code in AXA\espaxa.h. You must create this directory and put the expaxa.h file in it. Also fill in the WiFi credentials (or better: use the secrets file). More info on esphome
 [here](https://esphome.io/) or [here](https://www.galagaking.org/2019/11/05/esphome-workshop/). To start, connect the ESPAXA (without connecting the AXA Remote) directly to your USB port to upload the sketch the first time. Now OTA is installed, you can upload any new sketch 'Over the Air'. ESPHOME will try to find the module itself. If not, you must manage your DHCP server and 'hardcode' an IP address.
+## Connecting
+Use a RJ12 connecter to connect the module to the AXA remote. Use the connection in the schema. Remove the batteries in the AXA Remote!
+![Connector](https://github.com/galagaking/espaxa/blob/master/docs/20200831_155821.jpg)
 ## Logs
 By looking at the logs (you can use the webserver at the modules address, the serial port output or the esphome logs command), you can see if the module is working. It will output the WiFi connection, Home Assistant connection and at a 30 sec interval the state of your Window. If any command is given, this will show up as well.
 
