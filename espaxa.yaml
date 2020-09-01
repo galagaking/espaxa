@@ -4,7 +4,7 @@ esphome:
   board: d1_mini
 
   includes:
-  - AXA\espaxa.h 
+  - AXA/espaxa.h 
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_key
