@@ -2,6 +2,8 @@ esphome:
   name: esp_axa_01
   platform: ESP8266
   board: d1_mini
+  
+#reference to custom component, change file location if needed
 
   includes:
   - AXA/espaxa.h 
@@ -12,25 +14,28 @@ wifi:
 # Enable logging
 logger:
 
-# Enable Home Assistant API
+# Enable Home Assistant API (use password if needed)
 api:
 
+#enable Over-The-Air updates (use password if needed)
 ota:
-
-# Enable Web server
-web_server:
-  port: 80
 
 time:
   - platform: homeassistant
     id: homeassistant_time
 
-#only used for I2C sensor:
+# only used for I2C temperature sensor
+# SCAN: true will show all connected I2C devices and their addresses, probably needed to change in the 'sensor' section
 
 i2c:
   sda: D2
   scl: D1
   scan: True
+
+# UART connected via MCP2003 LINbus driver
+# D6 to pin 1 of MCP2003 (RX)
+# D7 to pin 4 of MCP2003 (TX)
+# be aware that the RX pin of MCP2003 is the OUTPUT, and so TX pin is INPUT
 
 uart:
   tx_pin: D7 #to pin 4 of the MCP2003
@@ -40,7 +45,7 @@ uart:
   id: uart_bus
 
 sensor:
-#first part only used for temperature sensor, change bmp/bme280 accordingly to your sensor.
+# bme280 (or bmp280) only used for temperature sensor, change bmp/bme280 accordingly to your sensor.
   - platform: bme280
     temperature:
       name: "Zolderraam temperatuur"
@@ -51,7 +56,7 @@ sensor:
       name: "BME280 Humidity"
     address: 0x76
     update_interval: 60s
-
+# get the status of the window from the Custom Component here, and make it available
   - platform: custom
     lambda: |-
       auto my_axa = new CustomAXA2RemoteUART(id(uart_bus));
@@ -60,7 +65,11 @@ sensor:
     sensors:
      name: "Axa Window"
      id: my_axa
-    
+
+# use the cover component to connect Home Assistant. Get status from the 'my_axa' variable
+# send commands through ASCII UART interface. Add some delay
+# some setups seems to need a OPEN-BEFORE-CLOSE command, maybe to unlock the window.
+
 cover:
   - platform: template
     name: "Zolderraam"
@@ -77,10 +86,13 @@ cover:
       - uart.write: "STOP\r\n"
       - delay: 0.1s
       - uart.write: "OPEN\r\n"
+      # To prevent 'deadlock' in Window push open before close (try your own setup if needed, removing the 'OPEN' command below
     close_action:
       - uart.write: "\r"
       - delay: 0.1s
       - uart.write: "STOP\r\n"
+      - delay: 0.1s
+      - uart.write: "OPEN\r\n"  
       - delay: 0.1s
       - uart.write: "CLOSE\r\n"
     stop_action:
