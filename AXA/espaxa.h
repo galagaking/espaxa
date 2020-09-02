@@ -51,7 +51,9 @@ class CustomAXA2RemoteUART : public Component, public UARTDevice {
       }
       buff[i]=0;
       axa_status=100*(buff[0]-'0')+10*(buff[1]-'0')+(buff[2]-'0');  // calculate status code from first three digits
-      ESP_LOGD("espaxa", "%d, %s", axa_status,buff);
+      i=i-2;
+      buff[i]=0; // remove 0D 0A linebreak
+      ESP_LOGD("espaxa", "%s-> %d", buff,axa_status);
       if (axa_status==AXA_CLOSED)
       {
         axa_window->publish_state(COVER_CLOSED); // only AXA_CLOSED will return CLOSED
