@@ -73,6 +73,10 @@ sensor:
 cover:
   - platform: template
     name: "Zolderraam"
+    # assumed_state TRUE will show both open and close buttons on Home Assistant interface
+    # therefor it is possible to stop the window halfway, if needed.
+    # If false (or removed) only one button will be shown in the interface.
+    assumed_state: false
     lambda: |-
       if (id(my_axa).state==0) {
         return cover::COVER_CLOSED;
