@@ -14,6 +14,7 @@ using namespace esphome;
 // 261 Firmware v1.20 2012   -> FIRMWARE
 // 502 Command not implemented
 
+#define AXA_OPENED 210 // 210 Unlocked
 #define AXA_CLOSED 211 // 211 Strong Locked
 
 
@@ -58,11 +59,11 @@ class CustomAXA2RemoteUART : public Component, public UARTDevice {
       {
         axa_window->publish_state(COVER_CLOSED); // only AXA_CLOSED will return CLOSED
       }
-      else
+      else if (axa_status==AXA_OPENED)
       {
-        axa_window->publish_state(COVER_OPEN);  // if not AXA_CLOSED the window is supposed to be open
+        axa_window->publish_state(COVER_OPEN);  // only AXA_OPENED will return OPEN
       }
-      
+      // no messages will be published on any other state (ie. 502 Command not implemented)
     }
     }
   }
